@@ -5,7 +5,7 @@ Scripts to help upload Animal Collective bootlegs to the Live Music Archive on t
 - The latest version of python. Please consult the internet for this, it can be finicky to set up.
 - The internetarchive library. Instructions for installation can be found [here](https://archive.org/services/docs/api/internetarchive/installation.html).
 - Your archive.org credentials in a config file. This can be done by running `ia configure` and entering your email and password.
-- A folder of the music files you are trying to upload to LMA, placed in the same folder as the two scripts. 
+- A folder of the music files you are trying to upload to LMA, placed in the same folder as the two scripts. Use `chmod 700 rename.sh` to make the bash script executable. 
 # What these scripts do
 The `rename.sh` script is a helper bash script that allows you to rename files to fit the LMA specifications. It takes four arguments: the name of the folder containing the music files, the date in yyyy-mm-dd format, the format of the files with a period in front (for example `.mp3`), and the identifier (in the format `acollectiveyyyy-mm-dd`). The python script calls on this one, but to run the script by itself you would enter the following:
 ```
