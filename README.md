@@ -23,7 +23,20 @@ Renaming to acollective2004-05-06t_01BansheeBeat-KidsOnHoliday.mp3
 ```
 
 The `upload.py` script allows the user to input the information required to upload a bootleg to LMA, generates an info file, and gives the option to rename the files using the `rename.sh` script. Run the script using `python upload.py` while in the same folder as the two scripts and the folder of music files to upload. The script will prompt you for the required information. When it comes to enter the setlist, first enter the total number of entries when prompted, then paste the entire setlist after the next prompt. If successful, the script will notify the user and print the link of the archive.org entry. 
+
+The generated description for these will always be of the same format.
+```
+Audio taken from the CollectedAnimals forum.
+
+[setlist]
+
+Uploaded in an effort to move all known Animal Collective live shows to the Live Music Archive.
+```
 # What these scripts do not do
 These scripts have no input validation, so please take care while entering information. Please also ensure that all the files you are uploading are of the same format. Do not try to use these scripts on singular unsplit bootlegs or videos. These scripts also do not affect the tags of the music files. To edit those please use separate software. 
+
+These scripts were written to upload Animal Collective bootlegs only, though they may be one day updated to be able to upload things to LMA for any band.
 # Bugs
 If you encounter bugs or errors please take a screenshot and describe the issue on Discord. Thank you!
+# TODO
+Create version that works on Windows.
