@@ -3,12 +3,16 @@ from internetarchive import search_items
 from subprocess import call
 
 # user required input
-dir = str(input("Folder name: "))
-format = str(input("File format: "))
-date = str(input("Date: "))
-venue = str(input("Venue: "))
-coverage = str(input("Location: "))
+print("All fields marked with an * are required. Press enter to skip non-essential fields")
+dir = str(input("Folder name*: "))
+format = str(input("File format*: "))
+date = str(input("Date*: "))
+venue = str(input("Venue*: "))
+coverage = str(input("Location*: "))
 taper = str(input("Taper: "))
+transferer = str(input("Transferer: "))
+source = str(input("Source: "))
+lineage = str(input("Lineage: "))
 
 # generate other metadata
 title = "Animal Collective Live at " + venue + " on " + date
@@ -47,7 +51,7 @@ for i in range(numSongs):
 info.close()
 
 # upload
-md = {'mediatype': 'etree', 'collection': 'etree', 'collection': 'AnimalCollective', 'creator': 'Animal Collective', 'subject': 'Live concert', 'title': title, 'year': year, 'type': 'sound', 'venue': venue, 'date': date, 'coverage': coverage, 'description': descriptionHTML, 'taper': taper}
+md = {'mediatype': 'etree', 'collection': 'etree', 'collection': 'AnimalCollective', 'creator': 'Animal Collective', 'subject': 'Live concert', 'title': title, 'year': year, 'type': 'sound', 'venue': venue, 'date': date, 'coverage': coverage, 'description': descriptionHTML, 'taper': taper, 'transferer': transferer, 'source': source, 'lineage': lineage}
 
 r = upload(id, dir + "/", metadata=md)
 status = str(r[0].status_code)
