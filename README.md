@@ -37,6 +37,6 @@ These scripts have no input validation, so please take care while entering infor
 
 These scripts were written to upload Animal Collective bootlegs only, though they may be one day updated to be able to upload things to LMA for any band.
 # Bugs
-If you encounter bugs or errors please take a screenshot and describe the issue on Discord. Thank you!
+If you encounter bugs or errors please report an issue or if you are on the Collection of Animals server, take a screenshot and describe the issue on Discord. Thank you!
 # TODO
 Create version that works on Windows.
