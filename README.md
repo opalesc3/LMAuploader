@@ -1,7 +1,7 @@
 # ancoLMAuploader
 Scripts to help upload Animal Collective bootlegs to the Live Music Archive on the Internet Archive
 # Requirements
-- The Mac Terminal application.
+- The Mac Terminal application (currently only works on Mac).
 - The latest version of python. Please consult the internet for this, it can be finicky to set up.
 - The internetarchive library. Instructions for installation can be found [here](https://archive.org/services/docs/api/internetarchive/installation.html).
 - Your archive.org credentials in a config file. This can be done by running `ia configure` and entering your email and password.
