@@ -39,4 +39,9 @@ These scripts were written to upload Animal Collective bootlegs only, though the
 # Bugs
 If you encounter bugs or errors please report an issue or if you are on the Collection of Animals server, take a screenshot and describe the issue on Discord. Thank you!
 # TODO
-Create version that works on Windows.
+- Allow for custom description through separate text file.
+- Allow for more fields (transferred by, source, lineage).
+- Input validation.
+- Better check for usable identifier.
+- Remove need for `rename.sh` by writing it in python.
+- Create version that works on Windows.
