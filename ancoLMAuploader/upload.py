@@ -6,7 +6,7 @@ import os
 
 def main():
     # user required input
-    print("All fields marked with an * are required. Press enter to skip non-essential fields")
+    print("All fields marked with an * are required. Press enter to skip non-essential fields.")
 
     directory = emptyInputCheck("Folder name*: ")
     while(os.path.isdir(directory) is False):
@@ -66,6 +66,9 @@ def rename(directory, identifier):
         print("Current track number and track title: " + str(tags['tracknumber']).zfill(2) + " " + str(tags['title']))
         print("Leave blank to use current values.")
         num = str(input("Track number: "))
+        while(num.isnumeric() is False):
+            print("Please enter digits only.")
+            num = str(input("Track number: "))
         title = str(input("Track title: ")).replace(" ", "")
         if len(num) == 0:
             num = str(tags['tracknumber']).zfill(2)
