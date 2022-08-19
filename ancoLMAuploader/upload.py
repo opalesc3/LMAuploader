@@ -21,6 +21,7 @@ def main():
             dateValid = True
         except ValueError:
             print("Invalid date. Please enter in yyyy-mm-dd format.")
+            date = emptyInputCheck("Date*: ")
 
     venue = emptyInputCheck("Venue*: ")
     coverage = str(input("Location: "))
@@ -66,7 +67,7 @@ def rename(directory, identifier):
         print("Current track number and track title: " + str(tags['tracknumber']).zfill(2) + " " + str(tags['title']))
         print("Leave blank to use current values.")
         num = str(input("Track number: "))
-        while(num.isnumeric() is False):
+        while(num.isnumeric() is False and num != ""):
             print("Please enter digits only.")
             num = str(input("Track number: "))
         title = str(input("Track title: ")).replace(" ", "")
