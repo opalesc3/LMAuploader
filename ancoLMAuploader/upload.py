@@ -29,6 +29,10 @@ def main():
     transferer = str(input("Transferer: "))
     source = str(input("Source: "))
     lineage = str(input("Lineage: "))
+    descFile = str(input("Description text file: "))
+    while((os.path.isfile(descFile) is False or os.path.splitext(descFile)[-1].lower() != ".txt") and descFile != ""):
+        print("Invalid file.")
+        directory = str(input("Description text file: "))
 
     # generate other metadata
     title = "Animal Collective Live at " + venue + " on " + date
@@ -42,7 +46,7 @@ def main():
     if re == "y":
         rename(directory, identifier)
 
-    description = genInfo(directory, identifier, date, venue, coverage)
+    description = genInfo(directory, identifier, date, venue, coverage, descFile)
     uploadFiles(directory, identifier, title, date, year, venue, coverage, description, taper, transferer, source, lineage)
 
 
@@ -62,34 +66,46 @@ def rename(directory, identifier):
         filename = str(os.fsdecode(file))
         print("\n" + filename)
         ext = os.path.splitext(file)[-1].lower()
-        tags = music_tag.load_file(directory + "/" + filename)
-
-        print("Current track number and track title: " + str(tags['tracknumber']).zfill(2) + " " + str(tags['title']))
-        print("Leave blank to use current values.")
-        num = str(input("Track number: "))
-        while(num.isnumeric() is False and num != ""):
-            print("Please enter digits only.")
+        try:
+            tags = music_tag.load_file(directory + "/" + filename)
+        except Exception:
+            continue
+        else:
+            print("Current track number and track title: " + str(tags['tracknumber']).zfill(2) + " " + str(tags['title']))
+            print("Leave blank to use current values.")
             num = str(input("Track number: "))
-        title = str(input("Track title: ")).replace(" ", "")
-        if len(num) == 0:
-            num = str(tags['tracknumber']).zfill(2)
-        if len(title) == 0:
-            title = str(tags['title']).replace(" ", "")
-        title = "".join([i if i not in "\/:*?<>|" else "-" for i in title])
-        newName = identifier + "t_" + num + title + ext
-        input("Renaming file to " + newName)
-        os.rename(directory + "/" + filename, directory + "/" + newName)
+            while(num.isnumeric() is False and num != ""):
+                print("Please enter digits only.")
+                num = str(input("Track number: "))
+            title = str(input("Track title: ")).replace(" ", "")
+            if len(num) == 0:
+                num = str(tags['tracknumber']).zfill(2)
+            if len(title) == 0:
+                title = str(tags['title']).replace(" ", "")
+            title = "".join([i if i not in "\/:*?<>|" else "-" for i in title])
+            newName = identifier + "t_" + num + title + ext
+            input("Renaming file to " + newName)
+            os.rename(directory + "/" + filename, directory + "/" + newName)
 
 
 # generate info file and description
-def genInfo(directory, identifier, date, venue, coverage):
+def genInfo(directory, identifier, date, venue, coverage, descFile):
     descriptionHTML = ""
-    customDescription = input("Please enter a description (one line only).\n")
-    infoFile = open(str(directory) + "/" + str(identifier) + "info.txt", "x")
+    try:
+        infoFile = open(str(directory) + "/" + str(identifier) + "info.txt", "x")
+    except FileExistsError:
+        pass
     infoFile = open(str(directory) + "/" + str(identifier) + "info.txt", "w")
     infoFile.write("Animal Collective\n" + date + "\n" + venue + "\n" + coverage + "\n\n")
+
+    if(descFile != ""):
+        descList = genDescription(descFile)
+        descriptionHTML = descriptionHTML + descList[0] + "<div><br /></div>"
+        customDescription = descList[1]
+    else:
+        customDescription = input("Please enter a description (one line only).\n")
+        descriptionHTML = descriptionHTML + "<div>" + customDescription + "</div><div><br /></div>"
     infoFile.write(customDescription + "\n\n")
-    descriptionHTML = descriptionHTML + "<div>" + customDescription + "</div><div><br /></div>"
 
     numSongs = int(emptyInputCheck("\nSetlist length: "))
     print("Paste setlist")
@@ -100,6 +116,20 @@ def genInfo(directory, identifier, date, venue, coverage):
 
     infoFile.close()
     return descriptionHTML
+
+
+# read description from file and return with HTML tags
+def genDescription(filename):
+    descriptionHTML = ""
+    description = ""
+    file = open(filename, "r")
+    for line in file:
+        if(line == "\n"):
+            line = "<br />"
+        descriptionHTML = descriptionHTML + "<div>" + line.strip() + "</div>"
+        description = description + line
+    file.close()
+    return [descriptionHTML, description]
 
 
 # upload
