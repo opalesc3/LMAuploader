@@ -3,8 +3,11 @@ from internetarchive import search_items
 import music_tag
 import datetime
 import os
+import requests
+import lxml.html as lh
 
 def main():
+    bandAbbrDict = scrape()
     # user required input
     print("All fields marked with an * are required. Press enter to skip non-essential fields.")
 
@@ -12,6 +15,23 @@ def main():
     while(os.path.isdir(directory) is False):
         print("Invalid folder.")
         directory = str(input("Folder name*: "))
+
+    bandName = emptyInputCheck("Band name*: ")
+    bandAbbr = ""
+    collection = ""
+    nameValid = False
+    while(nameValid is False):
+        try:
+            print("Fetching band abbreviation and collection name...")
+            bandAbbr = bandAbbrDict[bandName]
+            collection = collectionLookup(bandName)
+            cont = input("Band abbreviation: " + bandAbbr + "\nCollection: " + collection + "\nDoes this information look correct? (y/n): ")
+            if(cont == "y"):
+                nameValid = True
+            else:
+                bandName = emptyInputCheck("Band name*: ")
+        except Exception:
+            bandName = emptyInputCheck("Invalid band name entered. Please check your spelling and remove special characters.\nBand name*: ")
 
     date = emptyInputCheck("Date*: ")
     dateValid = False
@@ -35,9 +55,9 @@ def main():
         directory = str(input("Description text file: "))
 
     # generate other metadata
-    title = "Animal Collective Live at " + venue + " on " + date
+    title = bandName + " Live at " + venue + " on " + date
     year = date[:4]
-    identifier = "acollective" + date
+    identifier = bandAbbr + date
 
     identifier = idCheck(identifier)
     print("Successfully generated identifier " + identifier + "!")
@@ -46,8 +66,26 @@ def main():
     if re == "y":
         rename(directory, identifier)
 
-    description = genInfo(directory, identifier, date, venue, coverage, descFile)
-    uploadFiles(directory, identifier, title, date, year, venue, coverage, description, taper, transferer, source, lineage)
+    description = genInfo(directory, bandName, identifier, date, venue, coverage, descFile)
+    uploadFiles(directory, bandName, collection, identifier, title, date, year, venue, coverage, description, taper, transferer, source, lineage)
+
+
+def scrape():
+    url = "https://archive.org/audio/etree-band-abbrevs.php"
+    page = requests.get(url)
+    doc = lh.fromstring(page.content)
+    tr = doc.xpath('//tr')
+    dict = {}
+    for i in range(2, len(tr)):
+        dict[str(tr[i][0].text_content())] = str(tr[i][1].text_content()).split(";")[0]
+    return dict
+
+
+def collectionLookup(bandName):
+    collection = ""
+    for i in search_items('creator:"' + bandName + '" mediatype:collection'):
+        collection = str(i['identifier'])
+    return collection
 
 
 # check if identifier is taken
@@ -89,14 +127,14 @@ def rename(directory, identifier):
 
 
 # generate info file and description
-def genInfo(directory, identifier, date, venue, coverage, descFile):
+def genInfo(directory, bandName, identifier, date, venue, coverage, descFile):
     descriptionHTML = ""
     try:
         infoFile = open(str(directory) + "/" + str(identifier) + "info.txt", "x")
     except FileExistsError:
         pass
     infoFile = open(str(directory) + "/" + str(identifier) + "info.txt", "w")
-    infoFile.write("Animal Collective\n" + date + "\n" + venue + "\n" + coverage + "\n\n")
+    infoFile.write(bandName + "\n" + date + "\n" + venue + "\n" + coverage + "\n\n")
 
     if(descFile != ""):
         descList = genDescription(descFile)
@@ -133,9 +171,10 @@ def genDescription(filename):
 
 
 # upload
-def uploadFiles(directory, identifier, title, date, year, venue, coverage, description, taper, transferer, source,
+def uploadFiles(directory, bandName, collection, identifier, title, date, year, venue, coverage, description, taper, transferer, source,
                 lineage):
-    md = {'mediatype': 'etree', 'collection': 'etree', 'collection': 'AnimalCollective', 'creator': 'Animal Collective',
+    print("Uploading...")
+    md = {'mediatype': 'etree', 'collection': 'etree', 'collection': collection, 'creator': bandName,
           'subject': 'Live concert', 'title': title, 'year': year, 'type': 'sound', 'venue': venue, 'date': date,
           'coverage': coverage, 'description': description, 'taper': taper, 'transferer': transferer, 'source': source,
           'lineage': lineage}
