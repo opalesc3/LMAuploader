@@ -1,5 +1,6 @@
 from internetarchive import upload
 from internetarchive import search_items
+from internetarchive import get_item
 import music_tag
 import datetime
 import os
@@ -90,11 +91,11 @@ def collectionLookup(bandName):
 
 # check if identifier is taken
 def idCheck(identifier):
-    search = search_items("identifier:" + identifier)
-    while len(search) > 0:
+    item = get_item(identifier)
+    while len(item.item_metadata) > 0:
         suffix = emptyInputCheck("Identifier [" + identifier + "] is taken, please add a suffix: ")
         identifier = identifier + suffix
-        search = search_items("identifier:" + identifier)
+        item = get_item(identifier)
     return str(identifier)
 
 
