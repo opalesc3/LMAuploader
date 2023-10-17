@@ -8,7 +8,7 @@ Scripts to help upload bootlegs to the Live Music Archive on the Internet Archiv
 - ``music-tag``, a Python library that allows for the program to read from audio file tags.
 - ``lxml``, a Python library for HTML parsing.
 # What the script does
-The `upload.py` script allows the user to input the information required to upload a bootleg to LMA, generates an info file, and gives the option to rename the files. Run the script using `python upload.py` while in the same folder as the two scripts and the folder of music files to upload. The script will prompt you for the required information, as well as any optional fields. When it comes to enter the setlist, first enter the total number of entries when prompted, then paste the entire setlist after the next prompt. If successful, the script will notify the user and print the link of the archive.org entry. 
+The `upload.py` script allows the user to input the information required to upload a bootleg to LMA, generates an info file, and gives the option to rename the files. Make sure the script is in the same folder as the folder of music files to upload the optional description file and run the script using `python upload.py`. The script will prompt you for the required information, as well as any optional fields. When it comes to entering the setlist, first enter the total number of entries when prompted, then paste the entire setlist after the next prompt. If successful, the script will notify the user and print the link of the archive.org entry. 
 
 Please also ensure that all the files you are uploading exist in the same folder that is entered when prompted. This script does not affect the tags of the music files. 
 # Bugs
